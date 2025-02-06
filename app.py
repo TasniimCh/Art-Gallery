@@ -155,6 +155,22 @@ def afficher_carte():
 
 HEATMAP_DIR = "static/heatmaps"
 
+
+def create_heatmap(type_patrimoine):
+    filtered_df = data[data['Type'] == type_patrimoine]
+
+    pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
+                                       fill_value=0)
+
+    plt.figure(figsize=(5, 5))
+    sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
+    plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    heatmap_url = base64.b64encode(buf.getvalue()).decode('utf8')
+    return heatmap_url
 def generate_and_store_heatmaps():
     types = ["Artisanat", "Musique", "Architecture", "Culture"]
 
@@ -167,28 +183,10 @@ def generate_and_store_heatmaps():
 
         plt.figure(figsize=(11, 8))
         sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
-        plt.title(f"Heatmap pour le type de patrimoine: {type_patrimoine}")
-
+        plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
         heatmap_file_path = os.path.join(HEATMAP_DIR, f"{type_patrimoine.lower()}.png")
         plt.savefig(heatmap_file_path)
         plt.close()
-
-def create_heatmap(type_patrimoine):
-    filtered_df = data[data['Type'] == type_patrimoine]
-
-    pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
-                                       fill_value=0)
-
-    plt.figure(figsize=(11, 8))
-    sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
-    plt.title(f"Heatmap pour le type de patrimoine: {type_patrimoine}")
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    heatmap_url = base64.b64encode(buf.getvalue()).decode('utf8')
-    return heatmap_url
-
 app = Flask(__name__)
 
 
@@ -309,6 +307,7 @@ def download_image(filename):
 
 
 @app.route('/visualisation')
+
 def visualisation():
     return render_template('visualisation.html', plot_url=afficher_carte(), heatmap_url=None)
 
@@ -319,4 +318,5 @@ def heatmap(type_patrimoine):
 
 
 if __name__ == '__main__':
+    generate_and_store_heatmaps()
     app.run(debug=True)

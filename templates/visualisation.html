@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
 </head>
 <body>
-    <h1>Carte des Patrimoines</h1>
+    <h1>Heritage Map</h1>
     <div>
-        <button onclick="window.location.href='/heatmap/Artisanat'">Artisanat</button>
-        <button onclick="window.location.href='/heatmap/Musique'">Musique</button>
+        <button onclick="window.location.href='/heatmap/Artisanat'">Craftsmanship</button>
+        <button onclick="window.location.href='/heatmap/Musique'">Music</button>
         <button onclick="window.location.href='/heatmap/Architecture'">Architecture</button>
         <button onclick="window.location.href='/heatmap/Culture'">Culture</button>
     </div>
 
     <div>
-        <h2>Carte des Patrimoines</h2>
+        <h2>Heritage Map</h2>
         <img src="data:image/png;base64,{{ plot_url }}" alt="Carte du Patrimoine" />
     </div>
     {% if heatmap_url %}
@@ -25,5 +25,6 @@
         <img src="{{ heatmap_url }}" alt="Heatmap du Patrimoine" />
     </div>
     {% endif %}
+    <a href="/">Back to Home</a>
 </body>
 </html>
