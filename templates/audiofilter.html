@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Audio Filter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+<body>
+    <h1>Upload Audios to Apply Filter</h1>
+    <p>Mix and filter two audios seamlessly for a unique sound experience</p>
+    <label for="Audio1">Audio File 1:</label>
+    <input type="file" id="Audio1">
+    <label for="Audio2">Audio File 2:</label>
+    <input type="file" id="Audio2">
+    <button onclick="uploadAudio()">Apply Filter</button>
+    <br>
+
+    <script>
+        function uploadAudio() {
+            let formData = new FormData();
+            let audioFile1 = document.getElementById('Audio1').files[0];
+            let audioFile2 = document.getElementById('Audio2').files[0];
+            formData.append('audio1', audioFile1);
+            formData.append('audio2', audioFile2);
+
+            fetch('/audiofilter/apply', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('filteredAudio').src = data.mixed_audio_url;
+                    document.getElementById('download').href = data.mixed_audio_url;
+                    document.getElementById('download').style.display = "inline";
+                    document.getElementById('download').innerText = "Download";
+                });
+        }
+    </script>
+
+    <h3>Play the Processed Audio:</h3>
+        <audio controls id="filteredAudio">
+            <source src="" type="audio/wav">
+        </audio><br><br>
+
+    <a id="download" style="display:none">Download Filtered Audio</a>
+    <a href="/">Back to Home</a>
+</body>
+</html>

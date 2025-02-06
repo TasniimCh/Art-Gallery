@@ -1,0 +1,112 @@
+/* Center the entire page content */
+body {
+    font-family: "Comic Sans MS", sans-serif;
+    text-align: center;
+    background-color: #F3E0CE;
+    margin: 0;
+    padding: 5%;
+}
+
+/* Page Titles */
+h1 {
+    color: #082568;
+    font-size: 3em;
+    margin-bottom: 50px;
+}
+
+/* Buttons */
+button {
+    background-color: #082568;
+    color: white;
+    padding: 20px 30px;
+    font-size: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #082568;
+}
+/* Centered Gallery Layout */
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers images */
+    align-items: center;
+    gap: 15px;
+    width: 90%;
+    margin: auto;
+}
+
+
+
+/* Styling for individual images */
+img {
+    border-radius: 10px;
+    display: block;
+    margin: 20px auto;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+}
+
+/* Centering the generated tile */
+#tile {
+    display: block;
+    margin: 20px auto; /* Centers the image */
+}
+
+/* Styling for back button */
+a {
+    display: block;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 18px;
+    color: #082568;
+    border: 2px solid #082568;
+    border-radius: 5px;
+    width: fit-content;
+    transition: 0.3s;
+}
+
+a:hover {
+    background-color: #082568;
+    color: white;
+}
+
+/* File Input */
+input[type="file"] {
+    padding: 30px;
+    margin: 30px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: white;
+}
+
+/* Center Content */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#map-image {
+    max-width: 60%;  /* Adjust as necessary */
+    height: auto;    /* Maintain aspect ratio */
+    display: block;  /* Center the image if needed */
+    margin: 0 auto;  /* Center the image horizontally */
+}
+
+p {
+    font-size: 1.2rem;
+    color: #082568;
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px;
+    border-left: 5px solid #bf6161;
+    background: #f8f1e9;
+    border-radius: 8px;
+}

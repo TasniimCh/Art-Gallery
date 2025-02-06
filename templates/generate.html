@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate Moroccan Tile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+<body>
+    <h1>Generate Moroccan Tile</h1>
+
+    <p> Create your own playful patterns </p>
+
+    <label for="size">Select Tile Size:</label>
+    <select id="size">
+        <option value="100">100px</option>
+        <option value="50">50px</option>
+        <option value="75">75px</option>
+        <option value="150">150px</option>
+    </select>
+
+    <label for="shape">Select Shape:</label>
+    <select id="shape">
+        <option>Random</option>
+        <option value="Square">Square</option>
+        <option value="Triangle">Triangle</option>
+        <option value="Circle">Circle</option>
+        <option value="Diamond">Diamond</option>
+        <option value="Hexagon0">Hexagon 0</option>
+        <option value="Hexagon45">Hexagon 45</option>
+        <option value="Hexagon90">Hexagon 90</option>
+    </select>
+
+    <br>
+    <button onclick="generateTile()">Generate New Tile</button>
+    <br>
+
+    <img id="tile" src="" width="400">
+
+    <br>
+    <a href="/">Back to Home</a>
+
+    <script>
+    function generateTile() {
+        const size = document.getElementById("size").value;
+        const shape = document.getElementById("shape").value;
+
+        // If "Random" is selected, send null
+        const requestData = {
+            size: size !== 100 ? size : null,
+            shape: shape !== "Random" ? shape : null
+        };
+
+        fetch('/generate_tile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const img = document.getElementById("tile");
+            img.src = data.image;
+            img.style.display = "block";
+        })
+        .catch(error => console.error("Error:", error));
+    }
+    </script>
+</body>
+</html>
+

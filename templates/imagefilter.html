@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Image Filter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+<body>
+    <h1>Upload Image to Apply Filter</h1>
+    <p>  Give your photos a heritage-inspired black-and-white touch ,or apply a pixelated filter</p>
+    <input type="file" id="imageInput">
+    <button onclick="uploadImage()">Apply Filter</button>
+
+    <br>
+    <img id="filteredImage" src="" width="400">
+    <br>
+
+    <script>
+        function uploadImage() {
+            let formData = new FormData();
+            let imageFile = document.getElementById('imageInput').files[0];
+            formData.append('image', imageFile);
+
+            fetch('/imagefilter/apply', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('filteredImage').src = data.image;
+                    document.getElementById('download').href = data.image;
+                    document.getElementById('download').style.display = "inline";
+                    document.getElementById('download').innerText = "Download";
+                });
+        }
+    </script>
+
+    <a id="download" style="display:none">Download Filtered Image</a>
+    <a href="/">Back to Home</a>
+</body>
+</html>

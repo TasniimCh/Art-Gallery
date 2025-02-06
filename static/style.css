@@ -1,0 +1,103 @@
+/* General Styles */
+body {
+    font-family: "Comic Sans MS", sans-serif;
+    background-color: #F4E1D2;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Conteneur principal qui divise l'écran en deux */
+.container {
+    display: flex;  /* Place left-half et right-half côte à côte */
+    width: 100vw;
+    height: 100vh;
+}
+
+/* Partie gauche avec une image */
+.left-half {
+    width: 40%;
+    height: 100%;
+    background-image: url('https://th.bing.com/th/id/OIP.A4yHrtP1Dm6gSyApJPSwiQHaJw?rs=1&pid=ImgDetMain');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Partie droite avec du contenu */
+.right-half {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #F7E8DD;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Page Titles */
+h1 {
+    color: #082568;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+    background-color: #F3E0CE;
+    color: white;
+    padding: 20px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 20px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #082568;
+}
+
+p {
+    font-size: 1.2rem;
+    color: #082568;
+    text-align: center;
+    margin: 20px auto;
+    padding: 15px;
+    border-left: 5px solid #bf6161;
+    background: #f8f1e9;
+    border-radius: 8px;
+}
+
+
+
+
+/* Image Styling */
+img {
+    border-radius: 10px;
+    margin: 15px;
+    align-self: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Links */
+a {
+    display: block;
+    margin: 15px auto;
+    padding: 10px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #082568;
+    border: 2px solid #082568;
+    border-radius: 5px;
+    width: fit-content;
+    transition: 0.3s;
+}
+
+a:hover {
+    background-color: #082568;
+    color: white;
+}
+
