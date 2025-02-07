@@ -264,6 +264,25 @@ def apply_image_filter():
 
     return jsonify({"image": image_path})
 
+@app.route('/imagefilter/pixelized', methods=['POST'])
+def pixelize_image():
+    file = request.files['image']
+    pixel_size = 15
+    img = Image.open(file)
+    width, height = img.size
+
+    img_small = img.resize(
+        (width // pixel_size, height // pixel_size),
+        resample=Image.NEAREST
+    )
+    img_pixelized = img_small.resize(
+        (width, height),
+        resample=Image.NEAREST
+    )
+    image_path = f"static/generated/pixelized_image_{random.randint(1000, 9999)}.png"
+    img_pixelized.save(image_path)
+
+    return jsonify({"image": image_path})
 
 # 5. AUDIO FILTERING
 @app.route("/audiofilter")
