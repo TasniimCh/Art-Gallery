@@ -9,7 +9,7 @@ body {
 
 /* Conteneur principal qui divise l'écran en deux */
 .container {
-    display: flex;  /* Place left-half et right-half côte à côte */
+    display: flex;  
     width: 100vw;
     height: 100vh;
 }
