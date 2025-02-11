@@ -91,6 +91,9 @@ shapes = {
     "Hexagon90": Hexagon90
 }
 
+generated = "static/generated"
+os.makedirs(generated, exist_ok=True)
+
 DATA_PATH = "static/data/patrimoine_marocain_ameliore.csv"
 data = pd.read_csv(DATA_PATH, delimiter=';', skiprows=1, encoding='latin1')
 
@@ -153,9 +156,6 @@ def afficher_carte():
     plot_url = base64.b64encode(buf.getvalue()).decode('utf8')
     return plot_url
 
-HEATMAP_DIR = "static/heatmaps"
-
-
 def create_heatmap(type_patrimoine):
     filtered_df = data[data['Type'] == type_patrimoine]
 
@@ -184,9 +184,10 @@ def generate_and_store_heatmaps():
         plt.figure(figsize=(11, 8))
         sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
         plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
-        heatmap_file_path = os.path.join(HEATMAP_DIR, f"{type_patrimoine.lower()}.png")
+        heatmap_file_path = os.path.join(generated, f"{type_patrimoine.lower()}.png")
         plt.savefig(heatmap_file_path)
         plt.close()
+
 app = Flask(__name__)
 
 
@@ -216,7 +217,7 @@ def generate_new_tile():
     shape_type = shapes.get(selected_shape, random.choice(list(shapes.values())))
 
     img = generate_Tile(size=selected_size, shape_type=shape_type)
-    img_path = f"static/generated/Tile_{random.randint(1000, 9999)}.png"
+    img_path = os.path.join(generated, f"Tile_{random.randint(1000, 9999)}.png")
     img.save(img_path)
 
     return jsonify({"image": img_path})
@@ -259,7 +260,7 @@ def apply_image_filter():
     file = request.files['image']
     image = Image.open(file).convert("L")
 
-    image_path = f"static/generated/filtered_image_{random.randint(1000, 9999)}.png"
+    image_path = os.path.join(generated,f"filtered_image_{random.randint(1000, 9999)}.png")
     image.save(image_path)
 
     return jsonify({"image": image_path})
@@ -279,7 +280,7 @@ def pixelize_image():
         (width, height),
         resample=Image.NEAREST
     )
-    image_path = f"static/generated/pixelized_image_{random.randint(1000, 9999)}.png"
+    image_path = os.path.join(generated,f"pixelized_image_{random.randint(1000, 9999)}.png")
     img_pixelized.save(image_path)
 
     return jsonify({"image": image_path})
@@ -307,8 +308,7 @@ def apply_audio_filter():
 
     mixed = audio1.overlay(audio2)
 
-    mixed_audio_filename = f"filtered_audio_{random.randint(1000, 9999)}.wav"
-    mixed_audio_path = os.path.join('static/generated', mixed_audio_filename)
+    mixed_audio_path = os.path.join(generated, f"filtered_audio_{random.randint(1000, 9999)}.wav")
     mixed.export(mixed_audio_path, format="wav")
 
     os.remove(temp_audio_path1)
@@ -332,7 +332,7 @@ def visualisation():
 
 @app.route('/heatmap/<type_patrimoine>')
 def heatmap(type_patrimoine):
-    heatmap_url = f"/static/heatmaps/{type_patrimoine.lower()}.png"
+    heatmap_url = f"/{generated.replace(os.sep, '/')}/{type_patrimoine.lower()}.png"
     return render_template('visualisation.html', plot_url=afficher_carte(), heatmap_url=heatmap_url)
 
 
