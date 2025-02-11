@@ -34,7 +34,7 @@ button:hover {
 .gallery-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centers images */
+    justify-content: center;
     align-items: center;
     gap: 15px;
     width: 90%;
@@ -55,7 +55,7 @@ img {
 /* Centering the generated tile */
 #tile {
     display: block;
-    margin: 20px auto; /* Centers the image */
+    margin: 20px auto;
 }
 
 /* Styling for back button */
@@ -94,10 +94,10 @@ input[type="file"] {
 }
 
 #map-image {
-    max-width: 60%;  /* Adjust as necessary */
-    height: auto;    /* Maintain aspect ratio */
-    display: block;  /* Center the image if needed */
-    margin: 0 auto;  /* Center the image horizontally */
+    max-width: 60%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 p {
