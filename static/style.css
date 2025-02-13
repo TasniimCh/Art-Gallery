@@ -1,15 +1,15 @@
 /* General Styles */
 body {
     font-family: "Comic Sans MS", sans-serif;
-    background-color: #fbf3e0;
+    background-color: #F4E1D2;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Conteneur principal */
+/* Conteneur principal qui divise l'écran en deux */
 .container {
-    display: flex;
+    display: flex;  /* Place left-half et right-half côte à côte */
     width: 100vw;
     height: 100vh;
 }
@@ -31,7 +31,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #fdede1;
+    background-color: #F7E8DD;
     text-align: center;
     padding: 20px;
 }
