@@ -1,7 +1,7 @@
 /* General Styles */
 body {
     font-family: "Comic Sans MS", sans-serif;
-    background-color: #F4E1D2;
+    background-color: #fbf3e0;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -31,7 +31,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #F7E8DD;
+    background-color: #fdede1;
     text-align: center;
     padding: 20px;
 }

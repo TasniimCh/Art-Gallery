@@ -1,30 +1,84 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation des Patrimoines</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <script>
+        function toggleText(id) {
+            var text = document.getElementById(id);
+            var button = document.getElementById("show-more-btn-" + id);
+            if (text.style.maxHeight) {
+                text.style.maxHeight = null;
+                button.textContent = "Show More";
+            } else {
+                text.style.maxHeight = text.scrollHeight + "px";
+                button.textContent = "Show Less";
+            }
+        }
+    </script>
 </head>
 <body>
-    <h1>Heritage Map</h1>
-    <div>
-        <button onclick="window.location.href='/heatmap/Artisanat'">Craftsmanship</button>
-        <button onclick="window.location.href='/heatmap/Musique'">Music</button>
-        <button onclick="window.location.href='/heatmap/Architecture'">Architecture</button>
-        <button onclick="window.location.href='/heatmap/Culture'">Culture</button>
+
+    <h1>Data Visualization Map</h1>
+
+    <!-- Map Visualization Section -->
+    <div class="map-container">
+        <!-- Map Image -->
+        <div class="map-image-container">
+            <h2>Geographical Distribution Map</h2>
+            <img id="img1" src="data:image/png;base64,{{ plot_url }}" alt="Carte du Patrimoine" />
+        </div>
+        <div class="map-description">
+            <!-- Collapsible text area for map -->
+            <div id="collapsible-text-map" class="collapsible-text">
+                <p>This map visualization provides a geographic perspective on heritage distribution. It helps in understanding regional patterns and how heritage varies across different cities. The map uses color coding to indicate the intensity of heritage concentration, with brighter colors highlighting areas of higher concentration.</p>
+            </div>
+            <button id="show-more-btn-map" class="show-more-btn" onclick="toggleText('collapsible-text-map')">Show More</button>
+        </div>
     </div>
 
-    <div>
-        <h2>Heritage Map</h2>
-        <img src="data:image/png;base64,{{ plot_url }}" alt="Carte du Patrimoine" />
+    <!-- Legend Section -->
+    <div class="legend">
+        <div class="legend-item">
+            <button class="circular-btn artisanat" onclick="window.location.href='/heatmap/Artisanat'"></button>
+            <span>Craftsmanship</span>
+        </div>
+        <div class="legend-item">
+            <button class="circular-btn archit" onclick="window.location.href='/heatmap/Architecture'"></button>
+            <span>Architecture</span>
+        </div>
+        <div class="legend-item">
+            <button class="circular-btn culture" onclick="window.location.href='/heatmap/Culture'"></button>
+            <span>Culture</span>
+        </div>
+        <div class="legend-item">
+            <button class="circular-btn musique" onclick="window.location.href='/heatmap/Musique'"></button>
+            <span>Music</span>
+        </div>
     </div>
+
+    <!-- Heatmap Description Section -->
     {% if heatmap_url %}
-    <div>
-        <h2>Heatmap</h2>
-        <img src="{{ heatmap_url }}" alt="Heatmap du Patrimoine" />
+    <div class="map-heatmap-container">
+        <div class="heatmap-image-container">
+            <h2>Heritage Distribution Heatmap</h2>
+            <img id="img2" src="{{ heatmap_url }}" alt="Heatmap du Patrimoine" />
+        </div>
+        <div class="heatmap-description">
+            <!-- Collapsible text area for heatmap -->
+            <div id="collapsible-text-heatmap" class="collapsible-text">
+                <p>This heatmap provides a visual representation of the distribution of heritage across various cities. Each cell corresponds to a combination of a specific heritage type and city, with the color intensity indicating the presence or concentration of heritage in that location. Darker shades represent lower presence, while brighter colors highlight areas with a stronger presence. This map allows for easy identification of trends and variations in heritage distribution across the different cities.</p>
+            </div>
+            <button id="show-more-btn-heatmap" class="show-more-btn" onclick="toggleText('collapsible-text-heatmap')">Show More</button>
+        </div>
+
     </div>
     {% endif %}
-    <a href="/">Back to Home</a>
+
+    <br>
+    <a href="/" class="back-home">Back to Home</a>
+
 </body>
 </html>

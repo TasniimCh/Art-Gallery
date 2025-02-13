@@ -35,19 +35,19 @@ class Circle(Shape):
 class Diamond(Shape):
     def draw(self, drawing):
         points = [
+            (self.x, self.y - self.size // 2),
             (self.x + self.size // 2, self.y),
-            (self.x + self.size, self.y + self.size // 2),
-            (self.x + self.size // 2, self.y + self.size),
-            (self.x, self.y + self.size // 2)
+            (self.x, self.y + self.size // 2),
+            (self.x - self.size // 2, self.y)
         ]
         drawing.polygon(points, fill=self.color, outline="black")
 
 class Triangle(Shape):
     def draw(self, drawing):
         points = [
-            (self.x + self.size // 2, self.y),
-            (self.x, self.y + self.size),
-            (self.x + self.size, self.y + self.size)
+            (self.x + self.size // 2, self.y),                   # Sommet Haut
+            (self.x, self.y + self.size),                       # Bas Gauche
+            (self.x + self.size, self.y + self.size)            # Bas Droite
         ]
         drawing.polygon(points, fill=self.color, outline="black")
 
@@ -97,96 +97,7 @@ os.makedirs(generated, exist_ok=True)
 DATA_PATH = "static/data/patrimoine_marocain_ameliore.csv"
 data = pd.read_csv(DATA_PATH, delimiter=';', skiprows=1, encoding='latin1')
 
-def afficher_carte():
-    fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': ccrs.PlateCarree()})
 
-    ax.set_extent([-17, -1, 21, 36], ccrs.PlateCarree())  # Longitudes et latitudes approximatives du Maroc
-
-    ax.add_feature(cfeature.BORDERS, linewidth=1.2)
-    ax.coastlines()
-
-    category_colors = {
-        "Artisanat": "orange",
-        "Architecture": "blue",
-        "Culture": "yellow",
-        "Musique": "red"
-    }
-
-    data["color"] = data["Type"].map(category_colors).fillna("gray")
-
-    ax.scatter(
-        data["Longitude"], data["Latitude"],
-        color=data["color"], marker='o', s=100, transform=ccrs.PlateCarree()
-    )
-
-    for _, row in data.iterrows():
-        x_offset = 0.2
-        y_offset = 0.2
-
-        # Ajustement des coordonnées selon la ville
-        city_offsets = {
-            "Fez": (-0.4, -0.4),
-            "Meknes": (0.7, 0.2),
-            "Casablanca": (0, -0.4),
-            "Essaouira": (0.1, -0.3),
-            "Chefchaouen": (0.2, 0),
-            "Agadir": (0.2, -0.2),
-            "Guelmim": (0.2, -0.2),
-            "Dakhla": (0.2, -0.2)
-        }
-
-        x_offset, y_offset = city_offsets.get(row["Ville"], (0.2, 0.2))
-
-        ax.text(
-            row["Longitude"] + x_offset, row["Latitude"] + y_offset,
-            row["Ville"], fontsize=12, color='darkblue',
-            fontweight='bold', fontfamily='serif',
-            transform=ccrs.PlateCarree()
-        )
-
-    handles = [
-        plt.Line2D([0], [0], marker='o', color='w', label=cat, markersize=10,
-                   markerfacecolor=color) for cat, color in category_colors.items()
-    ]
-    ax.legend(handles, category_colors.keys(), title="Types de Patrimoine", loc='lower right')
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    plot_url = base64.b64encode(buf.getvalue()).decode('utf8')
-    return plot_url
-
-def create_heatmap(type_patrimoine):
-    filtered_df = data[data['Type'] == type_patrimoine]
-
-    pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
-                                       fill_value=0)
-
-    plt.figure(figsize=(5, 5))
-    sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
-    plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
-
-    buf = io.BytesIO()
-    plt.savefig(buf, format='png')
-    buf.seek(0)
-    heatmap_url = base64.b64encode(buf.getvalue()).decode('utf8')
-    return heatmap_url
-def generate_and_store_heatmaps():
-    types = ["Artisanat", "Musique", "Architecture", "Culture"]
-
-    for type_patrimoine in types:
-
-        filtered_df = data[data['Type'] == type_patrimoine]
-
-        pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
-                                           fill_value=0)
-
-        plt.figure(figsize=(11, 8))
-        sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
-        plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
-        heatmap_file_path = os.path.join(generated, f"{type_patrimoine.lower()}.png")
-        plt.savefig(heatmap_file_path)
-        plt.close()
 
 app = Flask(__name__)
 
@@ -222,7 +133,7 @@ def generate_new_tile():
 
     return jsonify({"image": img_path})
 
-def generate_Tile(size=100, num_rows=12, num_cols=12, shape_type=Square):
+def generate_Tile(size=100, num_rows=25, num_cols=25, shape_type=Square):
     img = Image.new('RGB', (500, 500), (255, 255, 255))
     drawing = ImageDraw.Draw(img)
 
@@ -233,6 +144,13 @@ def generate_Tile(size=100, num_rows=12, num_cols=12, shape_type=Square):
             x, y = col * size, row * size
             color = random.choice(selected_palette)
 
+            if shape_type == Diamond :
+                y = row * (size // 2)
+                if row % 2 == 0 :
+                    x += size // 2
+            if shape_type == Triangle :
+                if row % 2 == 0 :
+                    x -= size // 2
             if shape_type in [Hexagon0, Hexagon45, Hexagon90]:
                 new_size = size * 0.6
                 if shape_type == Hexagon0:
@@ -268,7 +186,7 @@ def apply_image_filter():
 @app.route('/imagefilter/pixelized', methods=['POST'])
 def pixelize_image():
     file = request.files['image']
-    pixel_size = 15
+    pixel_size = 10
     img = Image.open(file)
     width, height = img.size
 
@@ -330,6 +248,95 @@ def download_image(filename):
 def visualisation():
     return render_template('visualisation.html', plot_url=afficher_carte(), heatmap_url=None)
 
+def afficher_carte():
+    fig, ax = plt.subplots(figsize=(10, 10), subplot_kw={'projection': ccrs.PlateCarree()})
+
+    ax.set_extent([-17, -1, 21, 36], ccrs.PlateCarree())  # Longitudes et latitudes approximatives du Maroc
+
+    ax.add_feature(cfeature.BORDERS, linewidth=1.2)
+    ax.coastlines()
+
+    category_colors = {
+        "Artisanat": "orange",
+        "Architecture": "blue",
+        "Culture": "yellow",
+        "Musique": "red"
+    }
+
+    data["color"] = data["Type"].map(category_colors).fillna("gray")
+
+    ax.scatter(
+        data["Longitude"], data["Latitude"],
+        color=data["color"], marker='o', s=100, transform=ccrs.PlateCarree()
+    )
+
+    for _, row in data.iterrows():
+        x_offset = 0.2
+        y_offset = 0.2
+
+        # Ajustement des coordonnées selon la ville
+        city_offsets = {
+            "Fez": (-0.4, -0.4),
+            "Meknes": (0.7, 0.2),
+            "Casablanca": (0, -0.4),
+            "Essaouira": (0.1, -0.3),
+            "Chefchaouen": (0.2, 0),
+            "Agadir": (0.2, -0.2),
+            "Guelmim": (0.2, -0.2),
+            "Dakhla": (0.2, -0.2)
+        }
+
+        x_offset, y_offset = city_offsets.get(row["Ville"], (0.2, 0.2))
+
+        ax.text(
+            row["Longitude"] + x_offset, row["Latitude"] + y_offset,
+            row["Ville"], fontsize=12, color='darkblue',
+            fontweight='bold', fontfamily='serif',
+            transform=ccrs.PlateCarree()
+        )
+
+    handles = [
+        plt.Line2D([0], [0], marker='o', color='w', label=cat, markersize=10,
+                   markerfacecolor=color) for cat, color in category_colors.items()
+    ]
+    ax.legend(handles, category_colors.keys(), title="Types de Patrimoine", loc='lower right')
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    plot_url = base64.b64encode(buf.getvalue()).decode('utf8')
+    return plot_url
+def create_heatmap(type_patrimoine):
+    filtered_df = data[data['Type'] == type_patrimoine]
+
+    pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
+                                       fill_value=0)
+
+    plt.figure(figsize=(5, 5))
+    sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
+    plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    heatmap_url = base64.b64encode(buf.getvalue()).decode('utf8')
+    return heatmap_url
+def generate_and_store_heatmaps():
+    types = ["Artisanat", "Musique", "Architecture", "Culture"]
+
+    for type_patrimoine in types:
+
+        filtered_df = data[data['Type'] == type_patrimoine]
+
+        pivot_df = filtered_df.pivot_table(index='Patrimoine', columns='Ville', values='Latitude', aggfunc='count',
+                                           fill_value=0)
+
+        plt.figure(figsize=(11, 8))
+        sns.heatmap(pivot_df, annot=True, cmap='viridis', linewidths=0.5)
+        plt.title(f"Heatmap for Heritage Type: {type_patrimoine}")
+        heatmap_file_path = os.path.join(generated, f"{type_patrimoine.lower()}.png")
+        plt.savefig(heatmap_file_path)
+        plt.close()
 @app.route('/heatmap/<type_patrimoine>')
 def heatmap(type_patrimoine):
     heatmap_url = f"/{generated.replace(os.sep, '/')}/{type_patrimoine.lower()}.png"
