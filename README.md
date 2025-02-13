@@ -26,8 +26,8 @@ Before you begin, ensure that you have the following installed:
 Clone the project to your local machine using Git:
 
 ```bash
-git clone https://github.com/TasniimCh/Art-Gallery-2.git
-cd Art-Gallery-2
+git clone https://github.com/TasniimCh/Art-Gallery
+cd Art-Gallery
 ```
 
 Alternatively, you can download it directly as a ZIP file from GitHub.
