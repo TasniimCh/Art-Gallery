@@ -13,49 +13,91 @@ Part of the Digital Creativity project, the Interactive Generative Art Gallery r
 
 
 ## Installation
+You can set up this project in two ways: by cloning the repository from GitHub or by downloading it as a ZIP file.
 
-### Prerequisites
+### Option 1: Cloning from GitHub
 
-Before you begin, ensure that you have the following installed:
+#### 1. Prerequisites:
+
+Ensure you have the following installed:
 
 - [Python](https://www.python.org/) (version 3.11)
+- [Git](https://git-scm.com/)
 - [Pip](https://pip.pypa.io/en/stable/) (gestionnaire de paquets Python)
 
-### Clone the Project
+#### 2. Clone the Repository:
 
-Clone the project to your local machine using Git:
+Open your terminal or command prompt and run:
 
 ```bash
 git clone https://github.com/TasniimCh/Art-Gallery
 cd Art-Gallery
 ```
 
-Alternatively, you can download it directly as a ZIP file from GitHub.
+Create and Activate a Virtual Environment:
 
-### Install Dependencies  
-
-Once you're in the project directory, install the required dependencies using pip:
+```bash
+python -m venv venv
+source venv/bin/activate   # On macOS/Linux
+.\venv\Scripts\activate    # On Windows
+```
+Install Dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
-### Run the Project
-
-To start the application, use the following command:
+Run the Project:
 
 ```bash
 python app.py
 ```
-The application will launch locally on your machine.
 
-### Access the Gallery
+Access the Gallery:
 
-Once the application is running, open your web browser and go to the following URL:
+Open your web browser and go to:
 
 ```
 http://127.0.0.1:5000
 ```
+
+### Option 2: Installing from a ZIP File
+#### 1. Download and Extract the ZIP File:
+
+- Go to the GitHub Repository and download the project as a ZIP file.
+- Extract the ZIP file to a directory on your computer.
+
+#### 2. Open the Project in Your IDE:
+
+- If using PyCharm, open the extracted folder as a project.
+- Go to `File > Settings > Version Control > Directory Mappings` and set **VCS** to **"None"** to avoid Git configuration issues.
+
+#### 3.Create and Activate a Virtual Environment:
+
+- In PyCharm, navigate to `File > Settings > Project: Art-Gallery > Python Interpreter`.
+- Click on the gear icon and select **"Add Interpreter"**.
+- Choose **"Add Local Interpreter"** and create a new virtual environment.
+
+#### 4. Install Dependencies:
+Open the terminal in PyCharm and run:
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 5. Run the Project:
+
+- Right-click on `app.py` in PyCharm and select **"Run"**.
+
+#### 6. Access the Gallery:
+Open your web browser and visit:
+
+```
+http://127.0.0.1:5000
+```
+
 This will take you to the homepage of the Interactive Generative Art Gallery, where you can start exploring the artwork, generate Moroccan tiles, apply filters, and more.
+ Install Dependencies  
+
 ## Acknowledgements
 
  - Special thanks to our teacher, [SARA IBN EL AHRACHE], for providing us with the opportunity to work on this project.
@@ -64,3 +106,5 @@ This will take you to the homepage of the Interactive Generative Art Gallery, wh
 
 - [@salma-alm](https://www.github.com/salma-alm)
 - [@TasniimCh](https://www.github.com/TasniimCh)
+
+
